@@ -19,7 +19,7 @@ function Pages({isLoggedIn,setIsLoggedIn}) {
                 <Route path="/recipe/:id" element={<Recipe />} />
                 <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn}/>} />
                 <Route path="/login" element={isLoggedIn ? <Home />:<Login setIsLoggedIn={setIsLoggedIn}/>} /> 
-                <Route path="/addrecipes" element={isLoggedIn ? <AddRecipes /> : < Login setIsLoggedIn={setIsLoggedIn}/>} />
+                <Route path="/addrecipes" element={<AddRecipes /> } />
             </Routes>
         </AnimatePresence>
     );

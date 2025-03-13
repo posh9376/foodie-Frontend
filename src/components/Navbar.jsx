@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   let username = localStorage.getItem('username');
@@ -8,7 +8,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   const handleLogout = () => {
     // Clear all user data from localStorage
     localStorage.removeItem('username');
-    localStorage.removeItem('token'); // remove acces token
+    localStorage.removeItem('token'); // remove access token
     localStorage.clear(); 
     
     setIsLoggedIn(false); // 🔹 Update state to reflect logout
@@ -19,25 +19,24 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <a href="/" className="logo">RECIPE FINDER</a>
+        <Link to="/" className="logo">RECIPE FINDER</Link>
       </div>
       <div className="navbar-center">
         <ul className="nav-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/register">{isLoggedIn ? `` : 'Register'}</a></li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/register">{isLoggedIn ? '' : 'Register'}</Link></li>
           {isLoggedIn ? (
             <li><button onClick={handleLogout} className="logout-btn">Logout</button></li>
           ) : (
-            <li><a href="/login">Login</a></li>
+            <li><Link to="/login">Login</Link></li>
           )}
-          <li><a href="/addrecipes">{isLoggedIn ? 'Add Recipes' : ''}</a></li>
+          <li><Link to="/addrecipes">{isLoggedIn ? 'Add Recipes' : ''}</Link></li>
         </ul>
       </div>
       <div className="navbar-right">
-
-        <a href="/account" className="user-icon">
+        <Link to="/account" className="user-icon">
           <p>Welcome {isLoggedIn ? username : 'User'}</p>
-        </a>
+        </Link>
       </div>
     </nav>
   );
