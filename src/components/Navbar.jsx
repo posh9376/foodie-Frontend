@@ -9,7 +9,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
     // Clear all user data from localStorage
     localStorage.removeItem('username');
     localStorage.removeItem('token'); // remove acces token
-    localStorage.clear(); // Clears ALL localStorage data
+    localStorage.clear(); 
     
     setIsLoggedIn(false); // 🔹 Update state to reflect logout
 
@@ -30,14 +30,11 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn }) => {
           ) : (
             <li><a href="/login">Login</a></li>
           )}
-          <li><a href="/addrecipes">Add recipes</a></li>
+          <li><a href="/addrecipes">{isLoggedIn ? 'Add Recipes' : ''}</a></li>
         </ul>
       </div>
       <div className="navbar-right">
-        <a href="/cart" className="cart-icon">
-          <i className="fas fa-shopping-cart"></i>
-          <span className="cart-count">0</span>
-        </a>
+
         <a href="/account" className="user-icon">
           <p>Welcome {isLoggedIn ? username : 'User'}</p>
         </a>
