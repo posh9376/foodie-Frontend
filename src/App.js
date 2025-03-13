@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   return (
     <div className="App">
       <BrowserRouter>
