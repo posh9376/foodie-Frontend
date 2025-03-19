@@ -10,7 +10,7 @@ function Category() {
         <GiDjembe />
         <h4>African</h4>
       </SLink>
-      <SLink to={"/cuisine/Dessert"}>
+      <SLink to={"/cuisine/Desserts"}>
         <FaBirthdayCake />
         <h4>Dessert</h4>
       </SLink>
