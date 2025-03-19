@@ -24,13 +24,26 @@ Foodie v1.0 is a React-based web application that helps users search, discover, 
 
 
 ### 💾 Installation & Setup
-- Clone the repository:
+* clone the repository to your local device
+```bash
+git clone git@github.com:posh9376/foodie-Frontend.git
 ```
-git clone git@github.com:posh9376/foodie-Frontend.git ```
-- Navigate to the project folder:
-```cd foodie-Frontend bash```
--Then run ```npm install```
--Then ```npm start```
+
+* Onced cloned cd into that reposiory
+```bash
+cd foodie-Frontend
+```
+* Install dependancies
+```bash
+npm install
+```
+* Start the development server:
+``` bash
+npm start
+
+```
+
+
 
 
 ### 🔮 Future Improvements (Foodie v2.0 Roadmap)
@@ -45,7 +58,7 @@ Contributions are welcome! Feel free to fork this repo and create pull requests.
 ### 📧 Contact
 For suggestions, collaborations, or issues, feel free to reach out:
 
--Email: ric.amenya.coder@gmail.com
+-Email: eric.amenya.coder@gmail.com
 -GitHub: https://github.com/posh9376
 
 
