@@ -12,11 +12,9 @@ function Recipe() {
         const fetchDetails = async () => {
             try {
                 const response = await fetch(
-                    `http://127.0.0.1:5376/api/foods/${params.id}`
+                    `https://foodie-backend-0vyk.onrender.com/api/foods/${params.id}`
                 );
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const detailData = await response.json();
                 setDetails(detailData);
                 console.log("Fetched Recipe Details:", detailData);
@@ -25,14 +23,10 @@ function Recipe() {
             }
         };
 
-        if (params.id) {
-            fetchDetails();
-        }
+        if (params.id) fetchDetails();
     }, [params.id]);
 
-    if (!details) {
-        return <div>Loading...</div>;
-    }
+    if (!details) return <Loading>Loading recipe...</Loading>;
 
     return (
         <DetailWrapper>
@@ -41,25 +35,38 @@ function Recipe() {
                 <img src={details.image_url} alt={details.name} />
             </div>
             <Info>
-                
-                <Button
+                <TabButton
                     className={activeTab === "ingredients" ? "active" : ""}
                     onClick={() => setActiveTab("ingredients")}
                 >
                     Ingredients
-                </Button>
+                </TabButton>
 
-                <Button
+                <TabButton
                     className={activeTab === "instructions" ? "active" : ""}
                     onClick={() => setActiveTab("instructions")}
                 >
                     Instructions
-                </Button>
+                </TabButton>
 
-                {/* Instructions Tab */}
+                {activeTab === "ingredients" && details.ingredients && (
+                    <ContentBlock>
+                        <h3>Ingredients</h3>
+                        <ul>
+                            {details.ingredients.length > 0 ? (
+                                details.ingredients.map((ingredient, index) => (
+                                    <li key={index}>{ingredient}</li>
+                                ))
+                            ) : (
+                                <p>No ingredients available.</p>
+                            )}
+                        </ul>
+                    </ContentBlock>
+                )}
+
                 {activeTab === "instructions" && details.instructions && (
-                    <div>
-                        <h3>Instructions:</h3>
+                    <ContentBlock>
+                        <h3>Instructions</h3>
                         {details.instructions.length > 0 ? (
                             details.instructions.map((stepObj, index) => (
                                 <ul key={index}>
@@ -71,33 +78,15 @@ function Recipe() {
                         ) : (
                             <p>No instructions available.</p>
                         )}
-                    </div>
-                )}
-
-                {/* Ingredients Tab */}
-                {activeTab === "ingredients" && details.ingredients && (
-                    <div>
-                        <h3>Ingredients:</h3>
-                        <ul>
-                            {details.ingredients.length > 0 ? (
-                                details.ingredients.map((ingredient, index) => (
-                                    <li key={index}>{ingredient}</li>
-                                ))
-                            ) : (
-                                <p>No ingredients available.</p>
-                            )}
-                        </ul>
-                    </div>
+                    </ContentBlock>
                 )}
             </Info>
         </DetailWrapper>
     );
 }
 
-// Styled Components
 const DetailWrapper = styled.div`
-    margin-top: 10rem;
-    margin-bottom: 5rem;
+    margin: 5rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,51 +96,77 @@ const DetailWrapper = styled.div`
         background: linear-gradient(35deg, #494949, #313131);
         color: #fff;
     }
-    
+
     h2 {
         margin-bottom: 2rem;
+        font-size: 2.2rem;
     }
 
     img {
-        width: 400px;
+        width: 100%;
+        max-width: 450px;
         height: auto;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-        box-shadow: 0 0 20px
-    }
-   
-
-    li {
-        font-size: 1.2rem;
-        line-height: 2rem;
-        margin: 7px
-
-    }
-
-    ul {
-        margin-top: 1rem;
-        padding: 0;
+        border-radius: 15px;
+        box-shadow: 0 0 25px rgba(0,0,0,0.2);
     }
 `;
 
-const Button = styled.button`
+const TabButton = styled.button`
     padding: 1rem 2rem;
     color: #313131;
     background: white;
     border: 2px solid black;
-    margin-right: 2rem;
+    margin-right: 1rem;
     font-weight: 600;
     cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
 
     &:hover {
         background: #f8f8f8;
     }
-`
+
+    @media (max-width: 500px) {
+        padding: 0.8rem 1.2rem;
+        margin-right: 0.5rem;
+        font-size: 0.9rem;
+    }
+`;
 
 const Info = styled.div`
     margin-top: 2rem;
     text-align: left;
     width: 60%;
+
+    @media (max-width: 768px) {
+        width: 90%;
+    }
+`;
+
+const ContentBlock = styled.div`
+    margin-top: 1.5rem;
+
+    h3 {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        padding-left: 1.5rem;
+    }
+
+    li {
+        font-size: 1.2rem;
+        line-height: 1.8rem;
+        margin-bottom: 0.8rem;
+    }
+`;
+
+const Loading = styled.div`
+    text-align: center;
+    padding: 4rem;
+    font-size: 1.5rem;
+    color: #555;
 `;
 
 export default Recipe;

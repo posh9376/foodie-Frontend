@@ -1,145 +1,162 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 
-function Login ({setIsLoggedIn}){
+function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Prepare the data to send
     const data = { email, password };
 
     try {
-      const response = await axios.post('http://127.0.0.1:5376/api/user/login', data);
-      setMessage(response.data.message);  // Success message from backend
-      console.log(response.data.user.username);
-      
-      localStorage.setItem('token', response.data.access_token);  // Store the access token
-      localStorage.setItem('username', response.data.user.username)
-      setIsLoggedIn(true)
+      const response = await axios.post('https://foodie-backend-0vyk.onrender.com/api/user/login', data);
+      console.log(response.data);
+
+      if (response.data.error) {
+        setMessage(response.data.error);
+        return;
+      }
+
+      setMessage(response.data.message || 'Login successful!');
+      localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('username', response.data.user.username);
+      localStorage.setItem('email', response.data.user.email)
+      setIsLoggedIn(true);
     } catch (error) {
       if (error.response) {
-        setMessage(error.response.data.error);  // Error message from backend
+        setMessage(error.response.data.error || 'Login failed.');
       } else {
         setMessage('An error occurred. Please try again.');
       }
     }
   };
 
-  // Styles object for the component
-  const styles = {
-    loginContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: '100vh',
-      backgroundColor: '#f4f4f9',
-    },
-    loginForm: {
-      backgroundColor: '#fff',
-      padding: '30px',
-      borderRadius: '8px',
-      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-      width: '100%',
-      maxWidth: '400px',
-      textAlign: 'center',
-    },
-    h2: {
-      fontSize: '24px',
-      color: '#333',
-      marginBottom: '20px',
-    },
-    inputGroup: {
-      marginBottom: '15px',
-      textAlign: 'left',
-    },
-    label: {
-      fontSize: '14px',
-      color: '#555',
-      marginBottom: '5px',
-      display: 'block',
-    },
-    input: {
-      width: '100%',
-      padding: '10px',
-      fontSize: '14px',
-      border: '1px solid #ccc',
-      borderRadius: '4px',
-      backgroundColor: '#fafafa',
-      transition: 'border-color 0.3s ease',
-    },
-    inputFocus: {
-      borderColor: '#007bff',
-      outline: 'none',
-    },
-    btn: {
-      width: '100%',
-      padding: '12px',
-      backgroundColor: '#007bff',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '4px',
-      fontSize: '16px',
-      cursor: 'pointer',
-      transition: 'background-color 0.3s ease',
-    },
-    btnHover: {
-      backgroundColor: '#0056b3',
-    },
-    message: {
-      color: '#e74c3c',
-      fontSize: '14px',
-      marginTop: '10px',
-    },
-  };
-
   return (
-    <div style={styles.loginContainer}>
-      <div style={styles.loginForm}>
-        <h2 style={styles.h2}>Login</h2>
-        {message && <p style={styles.message}>{message}</p>}
-        <form onSubmit={handleLogin}>
-          <div style={styles.inputGroup}>
-            <label htmlFor="email" style={styles.label}>Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={styles.input}
-              onFocus={(e) => e.target.style.borderColor = styles.inputFocus.borderColor}
-              onBlur={(e) => e.target.style.borderColor = '#ccc'}
-            />
-          </div>
-          <div style={styles.inputGroup}>
-            <label htmlFor="password" style={styles.label}>Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={styles.input}
-              onFocus={(e) => e.target.style.borderColor = styles.inputFocus.borderColor}
-              onBlur={(e) => e.target.style.borderColor = '#ccc'}
-            />
-          </div>
-          <button
-            type="submit"
-            style={styles.btn}
-            onMouseEnter={(e) => e.target.style.backgroundColor = styles.btnHover.backgroundColor}
-            onMouseLeave={(e) => e.target.style.backgroundColor = styles.btn.backgroundColor}
-          >
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
+    <LoginContainer>
+      <LoginForm onSubmit={handleLogin}>
+        <Title>Login</Title>
+        {message && <Message>{message}</Message>}
+
+        <InputGroup>
+          <label>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </InputGroup>
+
+        <InputGroup>
+          <label>Password</label>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <ToggleBtn type="button" onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? 'Hide Password' : 'Show Password'}
+          </ToggleBtn>
+        </InputGroup>
+
+        <SubmitBtn type="submit">Login</SubmitBtn>
+      </LoginForm>
+    </LoginContainer>
   );
-};
+}
 
 export default Login;
+
+// 🌙 Styled Components (Dark Theme + Gradient Button)
+const LoginContainer = styled.div`
+  background: linear-gradient(35deg, #494949, #313131);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LoginForm = styled.form`
+  background-color: #2b2b2b;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  width: 90%;
+  max-width: 450px;
+  color: #fff;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #fff;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  input {
+    padding: 0.9rem;
+    border-radius: 0.8rem;
+    border: none;
+    background-color: #3c3c3c;
+    color: #fff;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      background-color: #505050;
+    }
+  }
+`;
+
+const ToggleBtn = styled.button`
+  margin-top: 0.7rem;
+  background: none;
+  border: none;
+  color: #ff7e5f;
+  cursor: pointer;
+  font-size: 0.9rem;
+  align-self: flex-start;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const SubmitBtn = styled.button`
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 2rem;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const Message = styled.p`
+  color: #ff6961;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+`;

@@ -8,6 +8,7 @@ import { AnimatePresence } from 'framer-motion';
 import Register from '../components/Register';
 import Login from '../components/Login';
 import AddRecipes from '../components/AddRecipes';
+import Account from '../components/account';
 function Pages({isLoggedIn,setIsLoggedIn}) {
     const location = useLocation();
     return (
@@ -20,6 +21,7 @@ function Pages({isLoggedIn,setIsLoggedIn}) {
                 <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn}/>} />
                 <Route path="/login" element={isLoggedIn ? <Home />:<Login setIsLoggedIn={setIsLoggedIn}/>} /> 
                 <Route path="/addrecipes" element={<AddRecipes /> } />
+                <Route path="/account" element={isLoggedIn ? <Account />:<Login setIsLoggedIn={setIsLoggedIn}/>} />
             </Routes>
         </AnimatePresence>
     );

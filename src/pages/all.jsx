@@ -4,36 +4,36 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/react-splide/css';
 import { Link } from "react-router-dom";
 
-function Veggie() {
-  const [veggie, setVeggie] = useState([]);
+function AllRecipes() {
+  const [allRecipes, setAllRecipes] = useState([]);
 
   useEffect(() => {
-    getVeggie();
+    getAllRecipes();
   }, []);
 
-  const getVeggie = async () => {
+  const getAllRecipes = async () => {
     try {
-      const response = await fetch("https://foodie-backend-0vyk.onrender.com/api/foods/category/Vegetarian");
+      const response = await fetch("https://foodie-backend-0vyk.onrender.com/api/foods/");
       const data = await response.json();
       console.log("API Response:", data);
 
       if (!data || !Array.isArray(data)) {
         console.error("Invalid API response:", data);
-        setVeggie([]);
+        setAllRecipes([]);
         return;
       }
 
-      setVeggie(data);
+      setAllRecipes(data);
     } catch (error) {
-      console.error("Error fetching vegetarian recipes:", error);
-      setVeggie([]);
+      console.error("Error fetching recipes:", error);
+      setAllRecipes([]);
     }
   };
 
   return (
     <div>
       <Wrapper>
-        <h3>Our Vegetarian Picks</h3>
+        <h3>All Recipes</h3>
         <Splide
           options={{
             perPage: 3,
@@ -48,8 +48,8 @@ function Veggie() {
             },
           }}
         >
-          {veggie?.length > 0 ? (
-            veggie.map((recipe) => (
+          {allRecipes?.length > 0 ? (
+            allRecipes.map((recipe) => (
               <SplideSlide key={recipe.id}>
                 <Card>
                   <Link to={`/recipe/${recipe.id}`}>
@@ -61,7 +61,7 @@ function Veggie() {
               </SplideSlide>
             ))
           ) : (
-            <NoData>No vegetarian recipes available.</NoData>
+            <NoData>No recipes available.</NoData>
           )}
         </Splide>
       </Wrapper>
@@ -145,4 +145,4 @@ const NoData = styled.p`
   padding: 2rem;
 `;
 
-export default Veggie;
+export default AllRecipes;
