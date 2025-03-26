@@ -25,7 +25,7 @@ const CutoutCard = () => {
             <p className="hero-description">
               We prepare delicious food<br></br> For you, we are always here!
             </p>
-            <a href="#">Discover More</a>
+            <button className="adamgiebl-button">Get Started</button>
           </div>
           
           <div className="curved-card-right">
